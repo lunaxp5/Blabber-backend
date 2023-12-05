@@ -15,16 +15,12 @@ mongoose
     console.log("conectado a BD");
   })
   .catch((err) => {
-    console.log("fallo");
+    console.log("fallo conexion BD");
   });
 
 app.use(express.json());
 app.use("/chat", useChatRouter);
 app.use("/user", useUserRoute);
-
-app.get("/", (_req, res) => {
-  res.send("hola ");
-});
 
 app.listen(PORT, () => {
   console.log("running");

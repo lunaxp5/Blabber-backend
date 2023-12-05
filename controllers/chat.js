@@ -1,5 +1,7 @@
 const Chat = require("../models/chat");
+
 const userController = require("../controllers/user");
+
 const validation = require("../utils/validations");
 
 const save = async (req, res) => {
@@ -66,10 +68,63 @@ const getByUserId = async (req, res) => {
   }
 };
 
+const saveMessage = async (req, res) => {
+  const { chatId } = req.params;
+  const { sender, receiver, description } = req.body;
+
+  if (
+    !validation.isValidObjectId(sender) ||
+    !validation.isValidObjectId(receiver)
+  ) {
+    res.status(400).json({ message: "Usuario no encontrado" });
+    return;
+  }
+
+  try {
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ message: "Chat no encontrado" });
+    }
+    const message = {
+      sender,
+      receiver,
+      description,
+    };
+
+    chat.messages.push(message);
+
+    const updatedChat = await chat.save();
+    res.json(updatedChat);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const removeAMessage = async (req, res) => {
+  const { chatId, messageId } = req.params;
+  console.log(messageId);
+
+  try {
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ message: "Chat no encontrado" });
+    }
+
+    chat.messages.pull({ _id: messageId });
+
+    const updatedChat = await chat.save();
+    res.json(updatedChat);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   save,
   remove,
   list,
   getById,
   getByUserId,
+  saveMessage,
+  removeAMessage,
 };

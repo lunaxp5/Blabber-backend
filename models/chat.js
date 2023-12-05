@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
 const MessageSchema = require("./message");
 
-const chatSchema = mongoose.Schema({
+const ChatSchema = mongoose.Schema({
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  messages: [MessageSchema],
+  messages: {
+    type: [MessageSchema],
+    default: [],
+  },
 });
 
-module.exports = mongoose.model("Chat", chatSchema);
+module.exports = mongoose.model("Chat", ChatSchema);

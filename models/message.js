@@ -6,9 +6,13 @@ const MessageSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
-  reciver: {
+  receiver: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
+  },
+  description: {
+    type: String,
     required: true,
   },
   timestamp: {
@@ -24,3 +28,5 @@ const MessageSchema = mongoose.Schema({
     default: false,
   },
 });
+
+module.exports = MessageSchema;
