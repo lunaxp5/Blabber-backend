@@ -1,7 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+
 const useChatRouter = require("./routes/chat");
+const useUserRoute = require("./routes/user");
 
 const app = express();
 
@@ -18,11 +20,12 @@ mongoose
 
 app.use(express.json());
 app.use("/chat", useChatRouter);
+app.use("/user", useUserRoute);
 
 app.get("/", (_req, res) => {
   res.send("hola ");
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("running");
 });
