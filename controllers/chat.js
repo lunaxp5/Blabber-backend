@@ -102,7 +102,6 @@ const saveMessage = async (req, res) => {
 
 const removeAMessage = async (req, res) => {
   const { chatId, messageId } = req.params;
-  console.log(messageId);
 
   try {
     const chat = await Chat.findById(chatId);
