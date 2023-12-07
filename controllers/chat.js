@@ -27,20 +27,16 @@ const save = async (req, res) => {
       ],
     });
 
-    console.log(participants);
-    console.log(chatFound);
-
     if (chatFound.length > 0) {
       res.json(chatFound);
       return;
     }
-    res.json({ message: "PASo" });
-    // const chat = Chat({
-    //   participants: participants,
-    //   messages: messages,
-    // });
-    // const chatSaved = await chat.save();
-    // res.json(chatSaved);
+    const chat = Chat({
+      participants: participants,
+      messages: messages,
+    });
+    const chatSaved = await chat.save();
+    res.json(chatSaved);
   } catch (error) {
     res.status(500).json({ message: err.message });
   }
@@ -81,7 +77,15 @@ const getById = async (req, res) => {
         { path: "receiver", model: "User" },
       ],
     });
-    res.json(chat);
+
+    const messageReads = chat?.messages.map((message) => {
+      message.read = true;
+      return message;
+    });
+
+    chat.messages = messageReads;
+    let updatedChat = await chat.save();
+    res.json(updatedChat);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -94,13 +98,16 @@ const getByUserId = async (req, res) => {
     return;
   }
   try {
-    const chats = await Chat.find({ participants: userId }).populate({
-      path: "messages",
-      populate: [
-        { path: "sender", model: "User" },
-        { path: "receiver", model: "User" },
-      ],
-    });
+    const chats = await Chat.find({ participants: userId })
+      .populate("participants")
+      .populate({
+        path: "messages",
+        populate: [
+          { path: "sender", model: "User" },
+          { path: "receiver", model: "User" },
+        ],
+      });
+
     res.json(chats);
   } catch (error) {
     res.status(500).json({ message: error.message });
