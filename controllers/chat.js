@@ -27,9 +27,7 @@ const save = async (req, res) => {
       ],
     });
 
-    console.log("-----");
-    console.log(chatFound);
-    if (chatFound.length > 0) {
+    if (chatFound) {
       res.json(chatFound);
       return;
     }
@@ -38,8 +36,9 @@ const save = async (req, res) => {
       messages: messages,
     });
     const chatSaved = await chat.save();
+
     res.json(chatSaved);
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
