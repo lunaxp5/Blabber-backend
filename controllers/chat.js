@@ -17,7 +17,7 @@ const save = async (req, res) => {
   try {
     const participantsStr = participants.map((id) => id.toString());
 
-    const chatFound = await Chat.find({
+    const chatFound = await Chat.findOne({
       participants: { $all: participantsStr },
     }).populate({
       path: "messages",
@@ -27,6 +27,8 @@ const save = async (req, res) => {
       ],
     });
 
+    console.log("-----");
+    console.log(chatFound);
     if (chatFound.length > 0) {
       res.json(chatFound);
       return;
