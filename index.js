@@ -8,12 +8,22 @@ const useUserRoute = require("./routes/user");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URI,
-    optionsSuccessStatus: 200,
-  })
-);
+const whitelist = [
+  process.env.FRONTEND_URI,
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
 
