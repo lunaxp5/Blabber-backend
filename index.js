@@ -9,9 +9,8 @@ const useUserRoute = require("./routes/user");
 const app = express();
 
 const whitelist = [
-  process.env.FRONTEND_URI,
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
+  "https://blabber-frontend.vercel.app",
+  "https://babbler-client.onrender.com",
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -23,7 +22,7 @@ const corsOptions = {
   },
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
 
