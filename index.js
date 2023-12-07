@@ -9,6 +9,7 @@ const useUserRoute = require("./routes/user");
 const app = express();
 
 const whitelist = [
+  "http://localhost:3000",
   "https://blabber-frontend.vercel.app",
   "https://babbler-client.onrender.com",
 ];
