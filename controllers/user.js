@@ -27,6 +27,12 @@ const save = async (req, res) => {
     res.status(400).json({ message: "Correo no válido" });
     return;
   }
+  const isEmail = await User.findOne({ email });
+
+  if (isEmail) {
+    res.status(400).json({ message: "Correo en uso" });
+    return;
+  }
 
   const user = User({
     name,
